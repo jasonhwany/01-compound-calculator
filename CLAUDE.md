@@ -1,6 +1,50 @@
 # Global Compound Interest Calculator — CLAUDE.md
 
-> 이 파일은 맥북/서피스 멀티 환경에서 작업해도 Claude가 프로젝트 상황을 파악할 수 있도록 유지하는 기억 장치입니다.
+> 맥북/서피스 멀티 환경에서 Claude가 즉시 상황을 파악할 수 있도록 유지하는 기억 장치.
+> **서피스에서 resume 시 → "내일 아침 첫 번째 할 일" 섹션부터 읽을 것.**
+
+---
+
+## 🚨 내일 아침 첫 번째 할 일 (2026-04-02, 출근 후 즉시)
+
+### Step 1 — Vercel 빌드 결과 확인
+
+어젯밤 자기 전에 다음 커밋을 push했음:
+```
+3398576  fix: output: export 설정 — Vercel 정적 배포 404 수정
+```
+
+Vercel 대시보드 접속 → **배포 상태 확인**
+- ✅ Ready + 사이트 정상 접속 → Step 2(Phase 3 차트) 바로 시작
+- ❌ 여전히 404 → 아래 추가 조치 실행
+
+### Step 2 — 만약 여전히 404일 경우 추가 조치
+
+**원인 분석:**
+Next.js 16.2.2는 Vercel의 현재 Next.js 서버 통합과 충돌함.
+- Vercel이 빌드는 성공(Ready)시키지만 라우팅 서빙이 안 됨
+- `output: "export"` 설정으로 정적 HTML 강제 생성하여 우회
+
+**추가 조치 옵션 A — Vercel 출력 디렉토리 수동 지정:**
+Vercel 대시보드 → Settings → Build & Output Settings
+- Output Directory: `out` 으로 변경 후 Redeploy
+
+**추가 조치 옵션 B — vercel.json 추가:**
+```bash
+cd ~/Desktop/Global-Tools-Hub/01-compound-calculator
+```
+아래 파일 생성 후 push:
+```json
+{
+  "outputDirectory": "out",
+  "buildCommand": "npm run build"
+}
+```
+
+**추가 조치 옵션 C — 프레임워크 Other로 변경:**
+Vercel 대시보드 → Settings → General → Framework Preset을 `Other`로 변경 후 Redeploy
+
+---
 
 ## 프로젝트 개요
 
@@ -8,106 +52,128 @@
 |------|------|
 | 서비스명 | Global Compound Interest Calculator |
 | 상위 프로젝트 | Global-Tools-Hub (10개 서비스 공장) |
-| 목적 | 복리 계산기 — 원금/이율/기간/납입 방식을 입력하면 최종 금액과 이자 시각화 |
-| 경로 | `~/Desktop/Global-Tools-Hub/01-compound-calculator` |
+| 로컬 경로 (맥북) | `~/Desktop/Global-Tools-Hub/01-compound-calculator` |
+| GitHub | https://github.com/jasonhwany/01-compound-calculator |
+| Vercel | https://01-compound-calculator-dfxd.vercel.app |
+| Remote | SSH (`git@github.com:jasonhwany/01-compound-calculator.git`) |
+| Branch | `main` — push 시 Vercel 자동 배포 |
 
 ## 기술 스택
 
-- **Framework**: Next.js 16.2.2 (App Router) — `create-next-app@latest` 설치 기준
-- **Language**: TypeScript
-- **Styling**: Tailwind CSS
-- **Linting**: ESLint
-- **Import Alias**: `@/*`
-- **src/ 디렉토리**: 미사용 (루트에 `app/` 직접 위치)
+| 항목 | 내용 |
+|------|------|
+| Framework | Next.js 16.2.2 (App Router) |
+| Language | TypeScript |
+| Styling | Tailwind CSS v4 |
+| UI 컴포넌트 | shadcn/ui (base-nova 스타일) |
+| 배포 방식 | `output: "export"` 정적 빌드 → Vercel |
+| Import Alias | `@/*` → 루트 |
 
-> ⚠️ 요청은 Next.js 14였으나, `create-next-app@latest` 실행 시 16.2.2가 설치됨. App Router 구조는 동일하게 적용.
+> ⚠️ Next.js 14 요청이었으나 `create-next-app@latest`로 16.2.2 설치됨
+> ⚠️ Tailwind v4 — 기존 `tailwind.config.js` 없음, `globals.css`에서 `@import "tailwindcss"` 방식 사용
 
-## 폴더 구조
+## 폴더 구조 (현재 상태)
 
 ```
 01-compound-calculator/
 ├── app/
-│   ├── layout.tsx       # 루트 레이아웃
-│   ├── page.tsx         # 메인 페이지 (계산기 UI)
-│   └── globals.css      # 글로벌 스타일
-├── components/          # (예정) 재사용 컴포넌트
-├── lib/                 # (예정) 계산 로직 유틸
+│   ├── layout.tsx       # 메타데이터: "Global Compound Interest Calculator"
+│   ├── page.tsx         # 메인 계산기 페이지 ("use client")
+│   └── globals.css      # Tailwind v4 + shadcn 테마
+├── components/
+│   └── ui/              # shadcn 컴포넌트
+│       ├── card.tsx
+│       ├── input.tsx
+│       ├── label.tsx
+│       └── slider.tsx
+├── lib/
+│   ├── calculator.ts    # 복리 계산 엔진
+│   └── utils.ts         # shadcn cn() 유틸
 ├── public/
+├── next.config.ts       # output: "export" 설정됨
 ├── CLAUDE.md            # 이 파일
 └── ...
 ```
 
-## 진행 상황
+## 구현된 기능 (Phase 2 완료)
 
-### ✅ Phase 1 — 환경 구축 (완료: 2026-04-01)
-- [x] `create-next-app` 으로 프로젝트 초기화
-- [x] TypeScript + Tailwind + App Router 설정 확인
-- [x] CLAUDE.md 생성
+### `lib/calculator.ts`
+- `calculateCompoundInterest(input)` — 월 복리 계산
+  - 입력: principal, annualRate, years, monthlyContribution
+  - 출력: totalValue, totalPrincipal, totalInterest, yearlyBreakdown[]
+- `formatCurrency(value)` — USD 포맷 (Intl.NumberFormat)
 
-### ✅ Phase 2 — 계산기 핵심 로직 (완료: 2026-04-01)
-- [x] shadcn/ui 설치 (card, input, label, slider)
-- [x] 복리 계산 함수 작성 (`lib/calculator.ts`)
-  - `calculateCompoundInterest()` — 월 복리, 연도별 breakdown 포함
-  - `formatCurrency()` — Intl.NumberFormat USD 포맷
-- [x] 메인 페이지 대시보드 UI (`app/page.tsx`)
-  - 입력 폼: 원금, 연이율, 기간, 월 납입액
-  - 결과 히어로: 총 자산, 총 원금, 총 이자 수익 (3분할)
-  - 원금/이자 비율 Progress Bar
-  - 연도별 Breakdown 스크롤 테이블
-  - Quick Presets 3종 (Conservative / Balanced / Aggressive)
-- [x] 반응형 레이아웃 (모바일 → lg: 5컬럼 그리드)
-- [x] `npm run build` 성공 (TypeScript errors: 0)
+### `app/page.tsx` — 대시보드 UI
+- **입력 폼**: 원금($), 연이율(%), 기간(yrs), 월 납입액($)
+- **결과 히어로 카드**: Total Future Value (크게 표시)
+- **분할 카드**: Total Principal (파란색) + Interest Earned (초록색)
+- **Progress Bar**: 원금/이자 비율 애니메이션
+- **Year-by-Year 테이블**: 연도별 자산/원금/이자 스크롤
+- **Quick Presets**: Conservative(4%/30yr) / Balanced(7%/20yr) / Aggressive(12%/15yr)
+- **반응형**: 모바일 1열 → lg 5컬럼 그리드
+- **테마**: 다크 슬레이트 배경 + 에메랄드 포인트
 
-### 🔲 Phase 3 — 시각화 (차트)
-- [ ] Recharts 설치
-- [ ] 연도별 성장 Area Chart (원금 vs 이자 스택)
-- [ ] 모바일 최적화 차트 크기
+---
+
+## 전체 작업 일지
+
+### 2026-04-01 (맥북, 저녁)
+
+| 시간 | 작업 | 결과 |
+|------|------|------|
+| Phase 1 | Next.js 16.2.2 프로젝트 초기화 | ✅ |
+| Phase 1 | CLAUDE.md 생성 | ✅ |
+| Phase 2 | shadcn/ui 설치 (card/input/label/slider) | ✅ |
+| Phase 2 | `lib/calculator.ts` 복리 계산 엔진 구현 | ✅ |
+| Phase 2 | `app/page.tsx` 대시보드 UI 전체 구현 | ✅ |
+| Phase 2 | `npm run build` 성공 (TypeScript errors: 0) | ✅ |
+| 배포 | GitHub SSH push 완료 | ✅ |
+| 배포 | Vercel 연동 (GitHub 자동 배포) | ✅ |
+| 배포 | 404 오류 발생 → `output: export` 수정 push | ✅ |
+| 배포 | Vercel 재빌드 중 (취침 전 상태) | ⏳ |
+
+---
+
+## 남은 작업 (Phase 3~5)
+
+### 🔲 Phase 3 — 시각화 차트 (다음 작업)
+- [ ] `npm install recharts`
+- [ ] `components/GrowthChart.tsx` — Area Chart (원금 vs 이자 누적 스택)
+- [ ] `app/page.tsx` 하단 차트 섹션 삽입
 
 ### 🔲 Phase 4 — 글로벌 대응
-- [ ] 다국어 지원 (next-intl)
-- [ ] 통화 단위 선택 (USD, KRW, EUR 등)
-- [ ] SEO 메타데이터 설정
+- [ ] 통화 단위 선택 (USD / KRW / EUR)
+- [ ] SEO 메타데이터 (`og:image`, `twitter:card`)
+- [ ] 다국어 지원 (next-intl, 추후 검토)
 
-### 🔲 Phase 5 — 배포
-- [ ] Vercel 배포
-- [ ] 커스텀 도메인 연결 (예정)
+### 🔲 Phase 5 — 배포 완성
+- [ ] Vercel 404 최종 해결 확인
+- [ ] 커스텀 도메인 연결 (미정)
+- [ ] Google Analytics 연동 (선택)
+
+---
+
+## 개발 환경 세팅 (서피스에서 clone 후 실행 시)
+
+```bash
+# 1. 레포 클론
+git clone git@github.com:jasonhwany/01-compound-calculator.git
+cd 01-compound-calculator
+
+# 2. 의존성 설치
+npm install
+
+# 3. 개발 서버 실행
+npm run dev
+# → http://localhost:3000
+```
+
+> SSH 키가 없으면 HTTPS로 클론:
+> `git clone https://github.com/jasonhwany/01-compound-calculator.git`
 
 ## 작업 컨벤션
 
-- 파일 크기: 800줄 이하, 함수 50줄 이하
-- 불변성 패턴 사용 (mutation 금지)
-- 입력값은 zod로 검증
-- 컴포넌트는 `components/` 에 분리, 계산 로직은 `lib/` 에 분리
-
-## GitHub / 배포 정보
-
-| 항목 | 내용 |
-|------|------|
-| GitHub | https://github.com/jasonhwany/01-compound-calculator |
-| Remote | SSH (`git@github.com:jasonhwany/01-compound-calculator.git`) |
-| Vercel | GitHub 연동 후 자동 배포 (아래 참고) |
-| Branch | `main` |
-
-### Vercel 연동 방법 (최초 1회)
-1. https://vercel.com 접속 → GitHub 로그인
-2. **Add New Project** → `01-compound-calculator` 리포 선택
-3. Framework: Next.js 자동 감지 → **Deploy** 클릭
-4. 이후 `main` push 시 자동 배포
-
-## 작업 일지
-
-### 2026-04-01 (맥북)
-- Phase 1: Next.js 16.2.2 프로젝트 초기화 완료
-- Phase 2: shadcn/ui + 복리 계산기 핵심 기능 전체 구현
-  - `lib/calculator.ts` — 월 복리 엔진, 연도별 breakdown
-  - `app/page.tsx` — 대시보드 UI (입력폼 + 결과 3분할 + 진행바 + 테이블 + 프리셋)
-  - 빌드 성공 (TypeScript errors: 0)
-- GitHub push 완료 (SSH 방식)
-
-## 다음 작업 (resume 시 여기서 시작)
-
-**Phase 3** — Recharts 성장 차트 추가
-1. `npm install recharts` 설치
-2. `components/GrowthChart.tsx` — Area Chart (원금 vs 이자 누적 스택)
-3. `app/page.tsx` 하단에 차트 섹션 삽입
-4. Vercel 첫 배포 완료 확인
+- 불변성 패턴 (mutation 금지)
+- 파일 800줄 이하, 함수 50줄 이하
+- 컴포넌트 → `components/`, 로직 → `lib/`
+- 커밋 후 반드시 `git push` (서피스 동기화 목적)
