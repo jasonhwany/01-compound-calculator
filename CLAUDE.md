@@ -79,9 +79,35 @@
 - 입력값은 zod로 검증
 - 컴포넌트는 `components/` 에 분리, 계산 로직은 `lib/` 에 분리
 
+## GitHub / 배포 정보
+
+| 항목 | 내용 |
+|------|------|
+| GitHub | https://github.com/jasonhwany/01-compound-calculator |
+| Remote | SSH (`git@github.com:jasonhwany/01-compound-calculator.git`) |
+| Vercel | GitHub 연동 후 자동 배포 (아래 참고) |
+| Branch | `main` |
+
+### Vercel 연동 방법 (최초 1회)
+1. https://vercel.com 접속 → GitHub 로그인
+2. **Add New Project** → `01-compound-calculator` 리포 선택
+3. Framework: Next.js 자동 감지 → **Deploy** 클릭
+4. 이후 `main` push 시 자동 배포
+
+## 작업 일지
+
+### 2026-04-01 (맥북)
+- Phase 1: Next.js 16.2.2 프로젝트 초기화 완료
+- Phase 2: shadcn/ui + 복리 계산기 핵심 기능 전체 구현
+  - `lib/calculator.ts` — 월 복리 엔진, 연도별 breakdown
+  - `app/page.tsx` — 대시보드 UI (입력폼 + 결과 3분할 + 진행바 + 테이블 + 프리셋)
+  - 빌드 성공 (TypeScript errors: 0)
+- GitHub push 완료 (SSH 방식)
+
 ## 다음 작업 (resume 시 여기서 시작)
 
-**Phase 3 시작** — Recharts 차트 추가
+**Phase 3** — Recharts 성장 차트 추가
 1. `npm install recharts` 설치
-2. `components/GrowthChart.tsx` 작성 — Area Chart (원금 vs 이자 스택 형태)
-3. `app/page.tsx` 하단에 차트 섹션 추가
+2. `components/GrowthChart.tsx` — Area Chart (원금 vs 이자 누적 스택)
+3. `app/page.tsx` 하단에 차트 섹션 삽입
+4. Vercel 첫 배포 완료 확인
