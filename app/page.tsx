@@ -5,6 +5,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { calculateCompoundInterest, formatCurrency, type CalculatorInput } from "@/lib/calculator"
+import GrowthChart from "@/components/GrowthChart"
 
 const DEFAULT_INPUT: CalculatorInput = {
   principal: 10000,
@@ -288,6 +289,17 @@ export default function CompoundCalculatorPage() {
             </Card>
           </div>
         </div>
+
+        {/* Growth Chart */}
+        <Card className="bg-slate-800/60 border-slate-700/50 backdrop-blur-sm">
+          <CardHeader className="pb-2">
+            <CardTitle className="text-white text-sm">Wealth Growth Over Time</CardTitle>
+            <p className="text-slate-400 text-xs">Principal (blue) + Interest (green) stacked</p>
+          </CardHeader>
+          <CardContent>
+            <GrowthChart data={result.yearlyBreakdown} />
+          </CardContent>
+        </Card>
 
         {/* Footer */}
         <p className="text-center text-slate-600 text-xs">

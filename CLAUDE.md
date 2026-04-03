@@ -5,44 +5,17 @@
 
 ---
 
-## 🚨 내일 아침 첫 번째 할 일 (2026-04-02, 출근 후 즉시)
+## 다음 할 일 (2026-04-03, Phase 4)
 
-### Step 1 — Vercel 빌드 결과 확인
+Phase 3 완료. 바로 Phase 4 시작.
 
-어젯밤 자기 전에 다음 커밋을 push했음:
-```
-3398576  fix: output: export 설정 — Vercel 정적 배포 404 수정
-```
+### Phase 4 — 글로벌 대응
+- [ ] 통화 단위 선택 UI (USD / KRW / EUR)
+- [ ] SEO 메타데이터 (`og:image`, `twitter:card`)
+- [ ] 다국어 지원 (next-intl, 추후 검토)
 
-Vercel 대시보드 접속 → **배포 상태 확인**
-- ✅ Ready + 사이트 정상 접속 → Step 2(Phase 3 차트) 바로 시작
-- ❌ 여전히 404 → 아래 추가 조치 실행
-
-### Step 2 — 만약 여전히 404일 경우 추가 조치
-
-**원인 분석:**
-Next.js 16.2.2는 Vercel의 현재 Next.js 서버 통합과 충돌함.
-- Vercel이 빌드는 성공(Ready)시키지만 라우팅 서빙이 안 됨
-- `output: "export"` 설정으로 정적 HTML 강제 생성하여 우회
-
-**추가 조치 옵션 A — Vercel 출력 디렉토리 수동 지정:**
-Vercel 대시보드 → Settings → Build & Output Settings
-- Output Directory: `out` 으로 변경 후 Redeploy
-
-**추가 조치 옵션 B — vercel.json 추가:**
-```bash
-cd ~/Desktop/Global-Tools-Hub/01-compound-calculator
-```
-아래 파일 생성 후 push:
-```json
-{
-  "outputDirectory": "out",
-  "buildCommand": "npm run build"
-}
-```
-
-**추가 조치 옵션 C — 프레임워크 Other로 변경:**
-Vercel 대시보드 → Settings → General → Framework Preset을 `Other`로 변경 후 Redeploy
+> 로컬 경로 (서피스): `C:/Users/velve/Global-Tools-Hub/01-compound-calculator`
+> 로컬 경로 (맥북): `~/Desktop/Global-Tools-Hub/01-compound-calculator`
 
 ---
 
@@ -95,7 +68,7 @@ Vercel 대시보드 → Settings → General → Framework Preset을 `Other`로 
 └── ...
 ```
 
-## 구현된 기능 (Phase 2 완료)
+## 구현된 기능 (Phase 3 완료)
 
 ### `lib/calculator.ts`
 - `calculateCompoundInterest(input)` — 월 복리 계산
@@ -113,33 +86,45 @@ Vercel 대시보드 → Settings → General → Framework Preset을 `Other`로 
 - **반응형**: 모바일 1열 → lg 5컬럼 그리드
 - **테마**: 다크 슬레이트 배경 + 에메랄드 포인트
 
+### `components/GrowthChart.tsx` — Phase 3 추가
+- recharts AreaChart (누적 스택)
+- 원금(파란색) + 이자(초록색) 시각화
+- 커스텀 툴팁 (연도별 상세 표시)
+- 다크 테마 적용
+
 ---
 
 ## 전체 작업 일지
 
 ### 2026-04-01 (맥북, 저녁)
 
-| 시간 | 작업 | 결과 |
-|------|------|------|
-| Phase 1 | Next.js 16.2.2 프로젝트 초기화 | ✅ |
-| Phase 1 | CLAUDE.md 생성 | ✅ |
-| Phase 2 | shadcn/ui 설치 (card/input/label/slider) | ✅ |
-| Phase 2 | `lib/calculator.ts` 복리 계산 엔진 구현 | ✅ |
-| Phase 2 | `app/page.tsx` 대시보드 UI 전체 구현 | ✅ |
-| Phase 2 | `npm run build` 성공 (TypeScript errors: 0) | ✅ |
-| 배포 | GitHub SSH push 완료 | ✅ |
-| 배포 | Vercel 연동 (GitHub 자동 배포) | ✅ |
-| 배포 | 404 오류 발생 → `output: export` 수정 push | ✅ |
-| 배포 | Vercel 재빌드 중 (취침 전 상태) | ⏳ |
+| 작업 | 결과 |
+|------|------|
+| Phase 1: Next.js 16.2.2 프로젝트 초기화 | ✅ |
+| Phase 1: CLAUDE.md 생성 | ✅ |
+| Phase 2: shadcn/ui 설치 (card/input/label/slider) | ✅ |
+| Phase 2: `lib/calculator.ts` 복리 계산 엔진 구현 | ✅ |
+| Phase 2: `app/page.tsx` 대시보드 UI 전체 구현 | ✅ |
+| 배포: GitHub push + Vercel 연동 | ✅ |
+| 배포: 404 오류 → `output: export` 수정 | ✅ |
+
+### 2026-04-03 (서피스, 오전)
+
+| 작업 | 결과 |
+|------|------|
+| Google Fonts http2 오류 → 로컬 폰트 방식으로 수정 | ✅ |
+| Phase 3: recharts 설치 | ✅ |
+| Phase 3: `components/GrowthChart.tsx` 구현 | ✅ |
+| Phase 3: `app/page.tsx` 차트 섹션 삽입 | ✅ |
 
 ---
 
 ## 남은 작업 (Phase 3~5)
 
-### 🔲 Phase 3 — 시각화 차트 (다음 작업)
-- [ ] `npm install recharts`
-- [ ] `components/GrowthChart.tsx` — Area Chart (원금 vs 이자 누적 스택)
-- [ ] `app/page.tsx` 하단 차트 섹션 삽입
+### ✅ Phase 3 — 시각화 차트 (완료, 2026-04-03)
+- [x] `npm install recharts`
+- [x] `components/GrowthChart.tsx` — Area Chart (원금 vs 이자 누적 스택)
+- [x] `app/page.tsx` 하단 차트 섹션 삽입
 
 ### 🔲 Phase 4 — 글로벌 대응
 - [ ] 통화 단위 선택 (USD / KRW / EUR)
