@@ -1,6 +1,29 @@
 "use client"
 
+import Script from "next/script"
 import { useState, useMemo } from "react"
+
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "WebApplication",
+  name: "Compound Interest Calculator",
+  url: "https://01-compound-calculator.vercel.app",
+  description:
+    "Free online compound interest calculator. Calculate how your investments grow over time with monthly contributions and annual interest rate.",
+  applicationCategory: "FinanceApplication",
+  operatingSystem: "Any",
+  offers: {
+    "@type": "Offer",
+    price: "0",
+    priceCurrency: "USD",
+  },
+  featureList: [
+    "Compound interest calculation",
+    "Monthly contribution support",
+    "Year-by-year breakdown",
+    "Interactive growth chart",
+  ],
+}
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
@@ -36,6 +59,11 @@ export default function CompoundCalculatorPage() {
 
   return (
     <main className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 px-4 py-8 md:py-12">
+      <Script
+        id="json-ld"
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
       <div className="max-w-5xl mx-auto space-y-8">
 
         {/* Header */}
@@ -293,6 +321,9 @@ export default function CompoundCalculatorPage() {
             </Card>
           </div>
         </div>
+
+        {/* Ad — 테이블/차트 사이 */}
+        <AdUnit slot="5648421888" format="horizontal" className="w-full" />
 
         {/* Growth Chart */}
         <Card className="bg-slate-800/60 border-slate-700/50 backdrop-blur-sm">
