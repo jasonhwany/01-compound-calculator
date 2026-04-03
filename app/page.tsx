@@ -6,6 +6,7 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { calculateCompoundInterest, formatCurrency, type CalculatorInput } from "@/lib/calculator"
 import GrowthChart from "@/components/GrowthChart"
+import AdUnit from "@/components/AdUnit"
 
 const DEFAULT_INPUT: CalculatorInput = {
   principal: 10000,
@@ -50,6 +51,9 @@ export default function CompoundCalculatorPage() {
             Enter your details below to see the magic happen.
           </p>
         </div>
+
+        {/* Ad — 헤더 하단 */}
+        <AdUnit slot="1234567890" format="horizontal" className="w-full" />
 
         {/* Main Grid */}
         <div className="grid grid-cols-1 lg:grid-cols-5 gap-6">
@@ -300,6 +304,9 @@ export default function CompoundCalculatorPage() {
             <GrowthChart data={result.yearlyBreakdown} />
           </CardContent>
         </Card>
+
+        {/* Ad — 차트 하단 */}
+        <AdUnit slot="0987654321" format="auto" className="w-full" />
 
         {/* Footer */}
         <p className="text-center text-slate-600 text-xs">
