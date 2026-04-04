@@ -1,6 +1,7 @@
 "use client"
 
 import Script from "next/script"
+import Link from "next/link"
 import { useState, useMemo, useCallback } from "react"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
@@ -41,6 +42,14 @@ const CURRENCIES = [
 ] as const
 type CurrencyCode = "USD" | "KRW" | "EUR"
 
+const FAQ_EN = [
+  { q: "What is a compound interest calculator?", a: "A compound interest calculator shows how your investment grows when interest is earned on both the principal and previously accumulated interest. It helps you project the future value of investments with regular monthly contributions." },
+  { q: "What is the difference between compound and simple interest?", a: "Simple interest is calculated only on the principal, while compound interest is calculated on the principal plus all previously earned interest. Over long periods, the difference is dramatic — compound interest can turn a modest monthly savings into significant wealth." },
+  { q: "How much do I need to save monthly to reach my goal?", a: "Use the 'Goal Calculator' tab. Enter your target amount, annual rate, and investment period, and the calculator instantly tells you the required monthly contribution." },
+  { q: "Which compounding frequency is best — monthly, quarterly, or annual?", a: "Monthly compounding yields slightly more than quarterly or annual compounding at the same annual rate. Most savings accounts, ETFs, and mutual funds compound monthly." },
+  { q: "Should I account for inflation in my calculations?", a: "Yes — inflation erodes purchasing power over time. Toggle on 'Inflation Adjustment' and enter the expected inflation rate (typically 2–3%) to see the real value of your future wealth." },
+]
+
 const TABS = [
   { id: "calculator", label: "계산기" },
   { id: "goal", label: "목표 역산" },
@@ -56,6 +65,7 @@ function parseNumber(v: string) {
 }
 
 export default function CompoundCalculatorPage() {
+  const [openFaq, setOpenFaq] = useState<number | null>(null)
   const [tab, setTab] = useState<TabId>("calculator")
   const [input, setInput] = useState<CalculatorInput>(DEFAULT_INPUT)
   const [currency, setCurrency] = useState<CurrencyCode>("USD")
@@ -98,6 +108,10 @@ export default function CompoundCalculatorPage() {
 
         {/* Header */}
         <div className="text-center space-y-2">
+          <div className="flex justify-center gap-3 text-xs">
+            <span className="text-emerald-400 font-semibold">🌐 English</span>
+            <Link href="/ko" className="text-slate-500 hover:text-slate-300 transition-colors">🇰🇷 한국어</Link>
+          </div>
           <p className="text-emerald-400 text-sm font-semibold tracking-widest uppercase">Global Tools Hub</p>
           <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-white">Compound Interest Calculator</h1>
           <p className="text-slate-400 text-sm md:text-base max-w-xl mx-auto">
@@ -390,6 +404,47 @@ export default function CompoundCalculatorPage() {
             <AdUnit slot="5648421888" format="horizontal" className="w-full" />
           </>
         )}
+
+        {/* FAQ */}
+        <div className="space-y-4">
+          <h2 className="text-white text-xl font-bold text-center">Frequently Asked Questions</h2>
+          <div className="space-y-2">
+            {FAQ_EN.map((item, i) => (
+              <Card key={i} className="bg-slate-800/60 border-slate-700/50 cursor-pointer"
+                onClick={() => setOpenFaq(openFaq === i ? null : i)}>
+                <CardContent className="pt-4 pb-4">
+                  <div className="flex justify-between items-start gap-4">
+                    <p className="text-white font-medium text-sm">{item.q}</p>
+                    <span className={`text-emerald-400 text-lg transition-transform flex-shrink-0 ${openFaq === i ? "rotate-45" : ""}`}>+</span>
+                  </div>
+                  {openFaq === i && <p className="text-slate-400 text-sm mt-3 leading-relaxed">{item.a}</p>}
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+        </div>
+
+        <AdUnit slot="5648421888" format="horizontal" className="w-full" />
+
+        {/* SEO Content */}
+        <Card className="bg-slate-800/40 border-slate-700/30">
+          <CardContent className="pt-6 pb-6 space-y-4 text-slate-400 text-sm leading-relaxed">
+            <h2 className="text-white font-semibold text-base">How to Use This Compound Interest Calculator</h2>
+            <p>
+              Enter your <strong className="text-slate-300">initial investment</strong>, <strong className="text-slate-300">annual interest rate</strong>,{" "}
+              <strong className="text-slate-300">investment period</strong>, and <strong className="text-slate-300">monthly contribution</strong> to instantly
+              see your projected future wealth. Useful for planning retirement savings, college funds, index fund investing, and any long-term financial goal.
+            </p>
+            <p>
+              The <strong className="text-slate-300">Goal Calculator</strong> tab works in reverse — enter your target amount and it tells you exactly
+              how much to save each month. The <strong className="text-slate-300">Scenario Comparison</strong> tab lets you compare two different
+              strategies side by side with a live chart.
+            </p>
+            <p className="text-xs text-slate-500">
+              Also available in Korean: <Link href="/ko" className="text-emerald-500 hover:underline">복리 계산기 (한국어)</Link>
+            </p>
+          </CardContent>
+        </Card>
 
         {/* Footer */}
         <p className="text-center text-slate-600 text-xs">
