@@ -67,6 +67,19 @@ export default function RootLayout({
         {children}
         <Script
           async
+          src="https://www.googletagmanager.com/gtag/js?id=G-GN51TN6PS4"
+          strategy="afterInteractive"
+        />
+        <Script id="google-analytics" strategy="afterInteractive">
+          {`
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', 'G-GN51TN6PS4');
+          `}
+        </Script>
+        <Script
+          async
           src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8414331859152952"
           crossOrigin="anonymous"
           strategy="afterInteractive"
