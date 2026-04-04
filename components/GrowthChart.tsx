@@ -15,28 +15,29 @@ import { formatCurrency } from "@/lib/calculator"
 
 interface GrowthChartProps {
   data: YearlySnapshot[]
+  currency?: string
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-function CustomTooltip({ active, payload, label }: any) {
+function CustomTooltip({ active, payload, label, currency }: any) {
   if (!active || !payload?.length) return null
   return (
     <div className="bg-slate-800 border border-slate-700 rounded-lg p-3 shadow-xl text-xs space-y-1">
       <p className="text-slate-300 font-semibold mb-1">Year {label}</p>
       <p className="text-blue-400">
-        Principal: {formatCurrency(payload[0]?.value ?? 0)}
+        Principal: {formatCurrency(payload[0]?.value ?? 0, currency)}
       </p>
       <p className="text-emerald-400">
-        Interest: {formatCurrency(payload[1]?.value ?? 0)}
+        Interest: {formatCurrency(payload[1]?.value ?? 0, currency)}
       </p>
       <p className="text-white font-bold pt-1 border-t border-slate-700">
-        Total: {formatCurrency((payload[0]?.value ?? 0) + (payload[1]?.value ?? 0))}
+        Total: {formatCurrency((payload[0]?.value ?? 0) + (payload[1]?.value ?? 0), currency)}
       </p>
     </div>
   )
 }
 
-export default function GrowthChart({ data }: GrowthChartProps) {
+export default function GrowthChart({ data, currency = "USD" }: GrowthChartProps) {
   return (
     <ResponsiveContainer width="100%" height={280}>
       <AreaChart data={data} margin={{ top: 10, right: 10, left: 10, bottom: 0 }}>
@@ -63,13 +64,14 @@ export default function GrowthChart({ data }: GrowthChartProps) {
           axisLine={false}
           tickLine={false}
           tickFormatter={(v) => {
-            if (v >= 1_000_000) return `$${(v / 1_000_000).toFixed(1)}M`
-            if (v >= 1_000) return `$${(v / 1_000).toFixed(0)}K`
-            return `$${v}`
+            const sym = currency === "KRW" ? "₩" : currency === "EUR" ? "€" : "$"
+            if (v >= 1_000_000) return `${sym}${(v / 1_000_000).toFixed(1)}M`
+            if (v >= 1_000) return `${sym}${(v / 1_000).toFixed(0)}K`
+            return `${sym}${v}`
           }}
           width={60}
         />
-        <Tooltip content={<CustomTooltip />} />
+        <Tooltip content={<CustomTooltip currency={currency} />} />
         <Legend
           wrapperStyle={{ fontSize: "12px", color: "#94a3b8", paddingTop: "12px" }}
           formatter={(value) => value === "totalPrincipal" ? "Principal" : "Interest"}

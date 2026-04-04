@@ -38,6 +38,14 @@ const DEFAULT_INPUT: CalculatorInput = {
   monthlyContribution: 500,
 }
 
+const CURRENCIES = [
+  { code: "USD", symbol: "$", label: "USD" },
+  { code: "KRW", symbol: "₩", label: "KRW" },
+  { code: "EUR", symbol: "€", label: "EUR" },
+] as const
+
+type CurrencyCode = "USD" | "KRW" | "EUR"
+
 function parseNumber(value: string): number {
   const parsed = parseFloat(value.replace(/,/g, ""))
   return isNaN(parsed) ? 0 : parsed
@@ -45,8 +53,11 @@ function parseNumber(value: string): number {
 
 export default function CompoundCalculatorPage() {
   const [input, setInput] = useState<CalculatorInput>(DEFAULT_INPUT)
+  const [currency, setCurrency] = useState<CurrencyCode>("USD")
 
   const result = useMemo(() => calculateCompoundInterest(input), [input])
+  const currencySymbol = CURRENCIES.find(c => c.code === currency)?.symbol ?? "$"
+  const fmt = (v: number) => formatCurrency(v, currency)
 
   const principalRatio = result.totalValue > 0
     ? Math.round((result.totalPrincipal / result.totalValue) * 100)
@@ -78,6 +89,22 @@ export default function CompoundCalculatorPage() {
             Watch your money grow with the power of compounding.
             Enter your details below to see the magic happen.
           </p>
+          {/* Currency Selector */}
+          <div className="flex justify-center gap-2 pt-2">
+            {CURRENCIES.map(c => (
+              <button
+                key={c.code}
+                onClick={() => setCurrency(c.code)}
+                className={`px-4 py-1.5 rounded-full text-sm font-semibold border transition-all ${
+                  currency === c.code
+                    ? "bg-emerald-500 text-white border-emerald-500"
+                    : "bg-slate-800 text-slate-400 border-slate-600 hover:border-emerald-500/50 hover:text-slate-200"
+                }`}
+              >
+                {c.symbol} {c.label}
+              </button>
+            ))}
+          </div>
         </div>
 
         {/* Ad — 헤더 하단 */}
@@ -101,7 +128,7 @@ export default function CompoundCalculatorPage() {
                   Initial Investment
                 </Label>
                 <div className="relative">
-                  <span className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-sm">$</span>
+                  <span className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-sm">{currencySymbol}</span>
                   <Input
                     id="principal"
                     type="number"
@@ -158,7 +185,7 @@ export default function CompoundCalculatorPage() {
                   Monthly Contribution
                 </Label>
                 <div className="relative">
-                  <span className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-sm">$</span>
+                  <span className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-sm">{currencySymbol}</span>
                   <Input
                     id="monthlyContribution"
                     type="number"
@@ -210,7 +237,7 @@ export default function CompoundCalculatorPage() {
                     Total Future Value
                   </p>
                   <p className="text-4xl md:text-5xl font-bold text-white tabular-nums">
-                    {formatCurrency(result.totalValue)}
+                    {fmt(result.totalValue)}
                   </p>
                   <p className="text-slate-400 text-sm">
                     After {input.years} year{input.years !== 1 ? "s" : ""} of growth
@@ -231,7 +258,7 @@ export default function CompoundCalculatorPage() {
                       </p>
                     </div>
                     <p className="text-xl md:text-2xl font-bold text-white tabular-nums">
-                      {formatCurrency(result.totalPrincipal)}
+                      {fmt(result.totalPrincipal)}
                     </p>
                     <p className="text-slate-500 text-xs">{principalRatio}% of total</p>
                   </div>
@@ -248,7 +275,7 @@ export default function CompoundCalculatorPage() {
                       </p>
                     </div>
                     <p className="text-xl md:text-2xl font-bold text-emerald-400 tabular-nums">
-                      {formatCurrency(result.totalInterest)}
+                      {fmt(result.totalInterest)}
                     </p>
                     <p className="text-slate-500 text-xs">{interestRatio}% of total</p>
                   </div>
@@ -304,13 +331,13 @@ export default function CompoundCalculatorPage() {
                         >
                           <td className="px-4 py-2 text-slate-300 font-medium">Y{row.year}</td>
                           <td className="px-4 py-2 text-right text-white font-semibold tabular-nums">
-                            {formatCurrency(row.totalValue)}
+                            {fmt(row.totalValue)}
                           </td>
                           <td className="px-4 py-2 text-right text-blue-400 tabular-nums hidden sm:table-cell">
-                            {formatCurrency(row.totalPrincipal)}
+                            {fmt(row.totalPrincipal)}
                           </td>
                           <td className="px-4 py-2 text-right text-emerald-400 tabular-nums">
-                            {formatCurrency(row.totalInterest)}
+                            {fmt(row.totalInterest)}
                           </td>
                         </tr>
                       ))}
@@ -332,7 +359,7 @@ export default function CompoundCalculatorPage() {
             <p className="text-slate-400 text-xs">Principal (blue) + Interest (green) stacked</p>
           </CardHeader>
           <CardContent>
-            <GrowthChart data={result.yearlyBreakdown} />
+            <GrowthChart data={result.yearlyBreakdown} currency={currency} />
           </CardContent>
         </Card>
 
