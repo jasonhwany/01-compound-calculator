@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://01-compound-calculator.vercel.app/sitemap.xml
+Sitemap: https://calc.moneystom7.com/sitemap.xml

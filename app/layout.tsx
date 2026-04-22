@@ -19,31 +19,31 @@ const faqJsonLd = {
 }
 
 export const metadata: Metadata = {
-  title: "Compound Interest Calculator – Free Online Tool | Global Tools Hub",
+  title: "복리 계산기 — MoneyStom7 | Compound Interest Calculator",
   description:
-    "Calculate compound interest instantly. See how your savings grow with monthly contributions, annual interest rate, and investment period. Free, no sign-up required.",
+    "원금·이율·기간으로 미래 자산을 계산하세요. 월 납입액 포함 복리 계산기. Free compound interest calculator with monthly contributions.",
   keywords: [
+    "복리 계산기",
     "compound interest calculator",
     "investment calculator",
     "savings calculator",
-    "compound interest formula",
-    "monthly contribution calculator",
-    "wealth growth calculator",
+    "월 납입 계산기",
+    "재테크 계산기",
     "interest rate calculator",
   ],
-  authors: [{ name: "Global Tools Hub" }],
+  authors: [{ name: "MoneyStom7" }],
   metadataBase: new URL(BASE_URL),
   alternates: {
     canonical: "/",
   },
   openGraph: {
-    title: "Compound Interest Calculator – Free Online Tool",
+    title: "복리 계산기 — MoneyStom7",
     description:
-      "Calculate compound interest instantly. See how your savings grow with monthly contributions, annual interest rate, and investment period.",
+      "원금·이율·기간으로 미래 자산을 계산하세요. 월 납입액 포함 복리 계산기.",
     url: BASE_URL,
-    siteName: "Global Tools Hub",
+    siteName: "MoneyStom7",
     type: "website",
-    locale: "en_US",
+    locale: "ko_KR",
   },
   twitter: {
     card: "summary_large_image",

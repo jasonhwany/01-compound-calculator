@@ -91,7 +91,7 @@ export default function KoreanPage() {
             <Link href="/" className="text-slate-500 hover:text-slate-300 transition-colors">🌐 English</Link>
             <span className="text-emerald-400 font-semibold">🇰🇷 한국어</span>
           </div>
-          <p className="text-emerald-400 text-sm font-semibold tracking-widest uppercase">Global Tools Hub</p>
+          <p className="text-emerald-400 text-sm font-semibold tracking-widest uppercase">MoneyStom7</p>
           <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-white">
             복리 계산기
           </h1>
@@ -385,7 +385,7 @@ export default function KoreanPage() {
         </Card>
 
         <p className="text-center text-slate-600 text-xs">
-          Global Tools Hub · 복리 계산기 · <Link href="/" className="hover:text-slate-400">English Version</Link>
+          MoneyStom7 · 복리 계산기 · <Link href="/" className="hover:text-slate-400">English Version</Link>
         </p>
       </div>
     </main>

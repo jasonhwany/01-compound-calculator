@@ -19,7 +19,7 @@ const jsonLd = {
   "@context": "https://schema.org",
   "@type": "WebApplication",
   name: "Compound Interest Calculator",
-  url: "https://01-compound-calculator.vercel.app",
+  url: "https://calc.moneystom7.com",
   description: "Free online compound interest calculator with goal planner, scenario comparison, inflation adjustment, and CSV export.",
   applicationCategory: "FinanceApplication",
   operatingSystem: "Any",
@@ -448,7 +448,7 @@ export default function CompoundCalculatorPage() {
 
         {/* Footer */}
         <p className="text-center text-slate-600 text-xs">
-          Global Tools Hub · Tool 01/10 · Compound Interest Calculator
+          MoneyStom7 · 복리 계산기 · Compound Interest Calculator
         </p>
       </div>
     </main>
